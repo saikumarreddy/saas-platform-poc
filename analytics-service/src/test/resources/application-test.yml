@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: analytics-service-test
+  profiles:
+    active: test
+
+server:
+  port: 0  # Random port for tests
+
+logging:
+  level:
+    root: INFO
+    com.saasplatform: DEBUG
+
+aws:
+  s3:
+    reports-bucket: saas-poc-reports-test
+  region: us-east-1
+
+spring-ai:
+  anthropic:
+    api-key: test-key
+    chat:
+      options:
+        model: claude-3-5-sonnet-20241022
+        max-tokens: 1024
+  openai:
+    api-key: test-key

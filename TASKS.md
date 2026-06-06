@@ -140,17 +140,18 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
 ### Testing & Quality
 
 #### TASK-010: Add Integration Tests with Testcontainers
-**Status**: `pending`  
+**Status**: `completed` ✅  
 **Description**: Full integration tests for analytics/ingestion services  
 **Why**: Catch regressions, ensure multi-tenant isolation  
 **Effort**: 4 hours  
-**Files**: `analytics-service/src/test/java/com/saasplatform/analytics/integration/`  
+**Files**: `analytics-service/src/test/java/com/saasplatform/analytics/integration/`, `ingestion-service/src/test/java/com/saasplatform/ingestion/integration/`  
 **Test Scenarios**:
-  - Analytics query → S3 save → EventBridge publish
-  - File upload → S3 store → EventBridge publish
-  - Multi-tenant isolation (tenant-a cannot access tenant-b data)
-  - JWT validation (invalid token → 401)  
-**Blocked By**: None
+  - Analytics query → S3 save → EventBridge publish ✅
+  - File upload → S3 store → EventBridge publish ✅
+  - Multi-tenant isolation (tenant-a cannot access tenant-b data) ✅
+  - JWT validation (invalid token → 401) ✅
+**Completed**: 2026-06-06
+**Test Coverage**: 23 integration test cases across 6 test classes using Testcontainers + LocalStack
 
 ---
 
@@ -254,6 +255,15 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
 - ✅ TASK-000: Setup GitHub Actions CI/CD
 - ✅ TASK-000: Write comprehensive documentation
 - ✅ TASK-000: Create CLAUDE.md and session memory
+
+### Sprint 1 (11 hours)
+- ✅ TASK-010: Add Integration Tests with Testcontainers (4h, completed 2026-06-06)
+  - 23 integration test cases
+  - Testcontainers + LocalStack setup
+  - Multi-tenant isolation verification
+  - JWT validation tests
+  - S3 and EventBridge integration tests
+  - Created TESTING.md guide
 
 ---
 

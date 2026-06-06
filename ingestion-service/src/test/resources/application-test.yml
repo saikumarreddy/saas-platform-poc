@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: ingestion-service-test
+  profiles:
+    active: test
+
+server:
+  port: 0  # Random port for tests
+
+logging:
+  level:
+    root: INFO
+    com.saasplatform: DEBUG
+
+aws:
+  s3:
+    uploads-bucket: saas-poc-ingestion-test
+    max-file-size-mb: 100
+  region: us-east-1
+
+spring-ai:
+  anthropic:
+    api-key: test-key
+    chat:
+      options:
+        model: claude-3-5-sonnet-20241022
+        max-tokens: 1024
+  openai:
+    api-key: test-key
