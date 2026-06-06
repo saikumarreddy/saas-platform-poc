@@ -69,18 +69,19 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
 ---
 
 #### TASK-005: Add Datadog Integration
-**Status**: `pending`  
+**Status**: `completed` ✅  
 **Description**: Metrics, traces, logs, custom dashboards  
 **Why**: Production monitoring and observability  
 **Effort**: 3 hours  
-**Files**: `pom.xml` (dd-java-agent), application.yml configs  
-**What to Track**:
-  - Request latency (p50, p95, p99)
-  - Error rate by service
-  - EventBridge lag
-  - DynamoDB throttling
-  - S3 upload/download duration  
-**Blocked By**: None
+**Completed**: 2026-06-06
+**Implementation**:
+  - Added Datadog Java Agent, API client, Micrometer registry dependencies
+  - DatadogConfig: APM/metrics configuration with environment variables
+  - MetricsService: 4 counters (queries, uploads, events, errors), 4 timers, 2 gauges
+  - Updated both services to record metrics for all endpoints
+  - Created MONITORING.md guide (500+ lines)
+  - 12 integration tests for metrics tracking
+  - Metrics available at /actuator/metrics endpoints
 
 ---
 

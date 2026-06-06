@@ -6,6 +6,7 @@ import com.saasplatform.analytics.service.InsightGenerationService.InsightReport
 import com.saasplatform.analytics.service.InsightGenerationService.Query;
 import com.saasplatform.analytics.service.ReportService;
 import com.saasplatform.context.RequestContextHolder;
+import com.saasplatform.monitoring.MetricsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -29,24 +30,34 @@ public class AnalyticsController {
     private final InsightGenerationService insightService;
     private final ReportService reportService;
     private final EventPublisher eventPublisher;
+    private final MetricsService metricsService;
 
     @PostMapping("/query")
     public ResponseEntity<Map<String, String>> queryInsights(@RequestBody Query query) {
         String tenantId = RequestContextHolder.getCurrentTenantId();
         log.info("Analytics query received for tenant: {}, title: {}", tenantId, query.title());
 
-        InsightReport report = insightService.generateInsights(query);
-        String reportId = reportService.saveReport(report);
-        String presignedUrl = reportService.getPresignedUrl(reportId);
+        long startTime = System.currentTimeMillis();
+        try {
+            InsightReport report = insightService.generateInsights(query);
+            metricsService.recordInsightGeneration(System.currentTimeMillis() - startTime);
 
-        eventPublisher.publishQueryCompleted(reportId);
+            String reportId = reportService.saveReport(report);
+            String presignedUrl = reportService.getPresignedUrl(reportId);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("reportId", reportId);
-        response.put("reportUrl", presignedUrl);
-        response.put("tenantId", tenantId);
+            eventPublisher.publishQueryCompleted(reportId);
+            metricsService.incrementAnalyticsQueries(tenantId);
 
-        return ResponseEntity.ok(response);
+            Map<String, String> response = new HashMap<>();
+            response.put("reportId", reportId);
+            response.put("reportUrl", presignedUrl);
+            response.put("tenantId", tenantId);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            metricsService.incrementErrors("query_error", tenantId);
+            throw e;
+        }
     }
 
     @PostMapping(value = "/query/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -54,9 +65,20 @@ public class AnalyticsController {
         String tenantId = RequestContextHolder.getCurrentTenantId();
         log.info("Streaming analytics query received for tenant: {}, title: {}", tenantId, query.title());
 
+        long startTime = System.currentTimeMillis();
+        metricsService.incrementAnalyticsQueries(tenantId);
+
         return insightService.streamInsights(query)
                 .doOnNext(chunk -> log.debug("Streaming chunk for tenant: {}", tenantId))
-                .doOnError(error -> log.error("Stream error for tenant: {}", tenantId, error));
+                .doOnError(error -> {
+                    log.error("Stream error for tenant: {}", tenantId, error);
+                    metricsService.incrementErrors("stream_error", tenantId);
+                })
+                .doFinally(signal -> {
+                    long duration = System.currentTimeMillis() - startTime;
+                    metricsService.recordInsightGeneration(duration);
+                    log.info("Streaming completed for tenant: {} in {}ms", tenantId, duration);
+                });
     }
 
     @GetMapping("/reports/{reportId}")

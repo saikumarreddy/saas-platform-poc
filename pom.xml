@@ -89,6 +89,27 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- Datadog APM & Monitoring -->
+        <dependency>
+            <groupId>com.datadoghq</groupId>
+            <artifactId>dd-java-agent</artifactId>
+            <version>1.32.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.datadoghq</groupId>
+            <artifactId>datadog-api-client</artifactId>
+            <version>1.13.0</version>
+        </dependency>
+
+        <!-- Micrometer for metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-datadog</artifactId>
+            <version>1.13.0</version>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

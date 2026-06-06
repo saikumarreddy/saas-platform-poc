@@ -20,10 +20,19 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,metrics
   endpoint:
     health:
       show-details: always
+  metrics:
+    export:
+      datadog:
+        enabled: ${DD_METRICS_ENABLED:false}
+        apiKey: ${DD_API_KEY:}
+        applicationName: ingestion-service
+        hostTag: true
+        descriptions: true
+        step: 1m
 
 aws:
   s3:
