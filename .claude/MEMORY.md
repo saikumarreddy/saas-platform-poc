@@ -6,6 +6,7 @@ This directory contains session memories and project context for future Claude s
 - [project_overview.md](memory/project_overview.md) — Project status, accomplishments, how to use
 - [implementation_patterns.md](memory/implementation_patterns.md) — Code patterns used (Spring AI, EventBridge, S3, K8s)
 - [session_summary.md](memory/session_summary.md) — Complete build session transcript and decisions
+- [task_management.md](memory/task_management.md) — How to track, update, and manage tasks
 
 ### How to Use These Files
 
@@ -29,3 +30,4 @@ When starting a new session:
 | project_overview.md | Status, accomplishments, architecture, endpoints, how to use | Starting a new session |
 | implementation_patterns.md | Code patterns with examples (Spring AI, S3, EventBridge, K8s) | Adding new features |
 | session_summary.md | Complete session history, decisions, timeline, feedback | Need detailed context |
+| task_management.md | How to track tasks, current backlog, recommended next steps | Planning new work |
