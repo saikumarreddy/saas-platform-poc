@@ -124,20 +124,18 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
 ---
 
 #### TASK-009: Add CloudWatch Dashboards & Alarms
-**Status**: `pending`  
+**Status**: `completed` ✅  
 **Description**: Custom dashboards for each service, SNS alerts  
 **Why**: Ops team visibility, incident response  
 **Effort**: 2 hours  
-**Files**: `infrastructure/terraform/cloudwatch.tf` (new)  
-**Dashboards**:
-  - Analytics Service (latency, errors, S3 ops)
-  - Ingestion Service (upload rate, processing lag)
-  - Infrastructure (EKS nodes, DynamoDB throttling)  
-**Alarms**:
-  - Error rate > 5% → SNS alert
-  - Response time > 5s → SNS alert
-  - DynamoDB throttled → SNS alert  
-**Blocked By**: None
+**Completed**: 2026-06-06
+**Implementation**:
+  - cloudwatch.tf: 3 dashboards, 7 alarms, SNS topic
+  - Analytics dashboard: response time, error rate, DynamoDB, S3, EventBridge
+  - Ingestion dashboard: upload performance, failures, DLQ
+  - Infrastructure dashboard: EKS nodes, EC2, DynamoDB, Lambda
+  - Alarms: error rate (5%), latency (5s), DynamoDB throttle, EKS resources (85%)
+  - Created DASHBOARDS.md guide (400+ lines)
 
 ---
 
@@ -260,7 +258,7 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
 - ✅ TASK-000: Write comprehensive documentation
 - ✅ TASK-000: Create CLAUDE.md and session memory
 
-### Sprint 1 (11 hours)
+### Sprint 1 (11 hours) - COMPLETED ✅
 - ✅ TASK-010: Add Integration Tests with Testcontainers (4h, completed 2026-06-06)
   - 23 integration test cases
   - Testcontainers + LocalStack setup
@@ -268,6 +266,27 @@ Track new features, bug fixes, improvements, and maintenance tasks for SaaS Plat
   - JWT validation tests
   - S3 and EventBridge integration tests
   - Created TESTING.md guide
+
+- ✅ TASK-001: Add Spring AI Streaming Support (2h, completed 2026-06-06)
+  - POST /api/v1/analytics/query/stream endpoint
+  - Server-Sent Events (SSE) for real-time insights
+  - Flux<String> streaming with Reactor
+  - 6 streaming integration tests
+  - Updated LOCAL_DEV.md with examples
+
+- ✅ TASK-005: Add Datadog Integration (3h, completed 2026-06-06)
+  - Datadog APM, metrics, logging setup
+  - MetricsService with 10 metrics (counters, timers, gauges)
+  - Datadog Java Agent configuration
+  - Controller metric tracking
+  - 12 metrics integration tests
+  - Created MONITORING.md guide
+
+- ✅ TASK-009: Add CloudWatch Dashboards & Alarms (2h, completed 2026-06-06)
+  - 3 CloudWatch dashboards (analytics, ingestion, infrastructure)
+  - 7 CloudWatch alarms with SNS notifications
+  - Alert playbooks and response procedures
+  - Created DASHBOARDS.md guide
 
 ---
 

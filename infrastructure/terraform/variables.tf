@@ -45,3 +45,9 @@ variable "dynamodb_billing_mode" {
   type        = string
   default     = "PAY_PER_REQUEST"
 }
+
+variable "alert_email" {
+  description = "Email address for CloudWatch alarms and SNS notifications"
+  type        = string
+  default     = null
+}
