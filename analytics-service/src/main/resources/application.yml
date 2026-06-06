@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: analytics-service
+  profiles:
+    active: local
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: INFO
+    com.saasplatform: DEBUG
+  pattern:
+    console: "%d{ISO8601} [%thread] %-5level %logger{36} [%X{tenant_id}] - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+aws:
+  s3:
+    reports-bucket: saas-poc-reports
+  eventbridge:
+    bus-name: default
+  region: us-east-1
+
+spring.ai:
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY:sk-ant-test}
+    chat:
+      options:
+        model: claude-3-5-sonnet-20241022
+        temperature: 0.7
+        max-tokens: 2048
+
+  openai:
+    api-key: ${OPENAI_API_KEY:sk-test}
+    embedding:
+      options:
+        model: text-embedding-ada-002
+
+jwt:
+  secret: test-secret-key-that-is-long-enough-for-testing-purposes

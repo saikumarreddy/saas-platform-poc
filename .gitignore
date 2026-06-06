@@ -1,0 +1,58 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Build
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+
+# Environment
+.env
+.env.local
+!.env.example
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Misc
+*.orig
+node_modules/
+dist/
+build/
+
+# LocalStack
+.localstack/
+localstack/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+
+# Docker
+.dockerignore
+
+# Git
+.gitignore.swp

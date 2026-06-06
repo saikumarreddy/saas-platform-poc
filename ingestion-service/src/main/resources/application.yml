@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: ingestion-service
+  profiles:
+    active: local
+
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+logging:
+  level:
+    root: INFO
+    com.saasplatform: DEBUG
+  pattern:
+    console: "%d{ISO8601} [%thread] %-5level %logger{36} [%X{tenant_id}] - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+aws:
+  s3:
+    ingestion-bucket: saas-poc-ingestion
+  eventbridge:
+    bus-name: default
+  region: us-east-1
+
+file:
+  max-size-mb: 100
+
+spring.ai:
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY:sk-ant-test}
+    chat:
+      options:
+        model: claude-3-5-sonnet-20241022
+        temperature: 0.7
+        max-tokens: 2048
+
+jwt:
+  secret: test-secret-key-that-is-long-enough-for-testing-purposes

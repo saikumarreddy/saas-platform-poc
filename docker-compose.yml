@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack-poc
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=s3,dynamodb,eventbridge,sqs,sns
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - LAMBDA_EXECUTOR=docker
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - "${TMPDIR:-.}/localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - saas-network
+    healthcheck:
+      test: [ "CMD", "awslocal", "s3", "ls" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: analytics-service
+    container_name: analytics-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - AWS_ENDPOINT_OVERRIDE=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-sk-ant-test}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-test}
+    depends_on:
+      localstack:
+        condition: service_healthy
+    networks:
+      - saas-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/api/v1/analytics/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ingestion-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: ingestion-service
+    container_name: ingestion-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - AWS_ENDPOINT_OVERRIDE=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-sk-ant-test}
+    depends_on:
+      localstack:
+        condition: service_healthy
+    networks:
+      - saas-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/api/v1/ingestion/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  saas-network:
+    driver: bridge
+
+volumes:
+  localstack:
+    driver: local
