@@ -1,0 +1,50 @@
+{
+  "model": "claude-opus-4-7",
+  "rules": [
+    "Always read CLAUDE.md first when starting a new session",
+    "Keep Java code concise - no unnecessary comments or abstractions",
+    "Use Spring annotations over manual configuration",
+    "Prefer editing existing files over creating new ones",
+    "Test locally with docker-compose before committing",
+    "Commit frequently with clear messages (feat:, fix:, docs:, test:)"
+  ],
+  "ignore_patterns": [
+    "target/",
+    ".idea/",
+    "*.class",
+    "*.jar",
+    ".DS_Store",
+    "node_modules/",
+    ".localstack/",
+    "*.tfstate*",
+    ".terraform/"
+  ],
+  "hooks": {
+    "beforeCommit": "mvn clean compile -q",
+    "afterPull": "echo 'Remember to read CLAUDE.md'"
+  },
+  "workspace": {
+    "java_version": "21",
+    "maven_version": "3.9.9",
+    "primary_branch": "main",
+    "project_type": "maven-multi-module"
+  },
+  "permissions": {
+    "tools": {
+      "Bash": "allowed",
+      "Read": "allowed",
+      "Edit": "allowed",
+      "Write": "allowed",
+      "Glob": "allowed",
+      "Grep": "allowed",
+      "Agent": "allowed_explore_plan_general"
+    },
+    "docker": "allowed",
+    "git": "allowed"
+  },
+  "claude_code": {
+    "status_line": "active",
+    "show_hints": true,
+    "auto_format": false
+  }
+}
