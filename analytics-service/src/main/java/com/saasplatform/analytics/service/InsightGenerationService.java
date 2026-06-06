@@ -6,6 +6,7 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.stereotype.Service;
 import com.saasplatform.context.RequestContextHolder;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
@@ -44,5 +45,29 @@ public class InsightGenerationService {
                 .content();
 
         return converter.convert(response);
+    }
+
+    public Flux<String> streamInsights(Query query) {
+        String tenantId = RequestContextHolder.getCurrentTenantId();
+        log.info("Streaming insights for tenant: {}, query: {}", tenantId, query.title());
+
+        String prompt = """
+                Analyze the following SaaS analytics data and provide real-time insights:
+
+                Title: {0}
+                Metrics: {1}
+                Date Range: {2}
+
+                Provide detailed analysis, breaking down the insights step by step.
+                Focus on actionable recommendations for improving the business metrics.
+                """;
+
+        return chatClient.prompt()
+                .user(user -> user.text(prompt,
+                        query.title(),
+                        query.metrics(),
+                        query.dateRange()))
+                .stream()
+                .content();
     }
 }

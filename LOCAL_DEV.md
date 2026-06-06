@@ -166,6 +166,50 @@ Response:
 }
 ```
 
+#### Stream Insights (Real-time, Server-Sent Events)
+
+For long-running AI operations, use the streaming endpoint to get real-time chunks:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/analytics/query/stream \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwidGVuYW50X2lkIjoidGVuYW50LWEifQ.test" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Real-time Revenue Stream",
+    "metrics": "revenue: $125K, growth: +15%",
+    "dateRange": "2024-01-01 to 2024-01-31"
+  }'
+```
+
+Response (Server-Sent Events):
+```
+Real-time
+revenue
+analysis
+showing
+15%
+growth
+this
+quarter.
+```
+
+**Browser Example** (JavaScript):
+```javascript
+const eventSource = new EventSource('/api/v1/analytics/query/stream', {
+  method: 'POST',
+  headers: { 'Authorization': 'Bearer <token>' }
+});
+
+eventSource.onmessage = (event) => {
+  console.log('Chunk:', event.data);
+};
+
+eventSource.onerror = () => {
+  console.log('Stream ended');
+  eventSource.close();
+};
+```
+
 #### Retrieve a Report
 
 ```bash
