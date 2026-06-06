@@ -7,6 +7,7 @@ This directory contains session memories and project context for future Claude s
 - [implementation_patterns.md](memory/implementation_patterns.md) — Code patterns used (Spring AI, EventBridge, S3, K8s)
 - [session_summary.md](memory/session_summary.md) — Complete build session transcript and decisions
 - [task_management.md](memory/task_management.md) — How to track, update, and manage tasks
+- [SECURITY_CHECKLIST.md](memory/SECURITY_CHECKLIST.md) — Secret management, security checklist, incident response
 
 ### How to Use These Files
 
